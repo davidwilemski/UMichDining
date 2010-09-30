@@ -1,0 +1,9 @@
+9-30-2010
+
+Current state:
+
+The layout of the app is mostly where I'd like it. I'm currently working on parsing XML for the menu. This is done in a tab activity - once I have parsing working I will do this in a separate thread. 
+
+I have been advised to store data in bundles to pass between activities.
+
+There is currently no settings menu when the menu button is pressed on the handset.
