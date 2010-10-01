@@ -58,12 +58,12 @@ public class NorthCampusTab extends ListActivity{
 							
 							for (int i = 0; i < menuitems.getLength(); i++) {
 	
-//								Element fstElmnt = (Element) node;
-//								NodeList nameList = fstElmnt.getElementsByTagName("menuitem");
-//								Element nameElement = (Element) nameList.item(i);
-//								nameList = nameElement.getChildNodes();
-//								entrees[i] = ((Node) nameList.item(0)).getNodeValue();
-								entrees[i] =  menuitems.item(i).getNodeValue();
+								Element fstElmnt = (Element) node;
+								NodeList nameList = fstElmnt.getElementsByTagName("menuitem");
+								Element nameElement = (Element) nameList.item(i);
+								nameList = nameElement.getChildNodes();
+								entrees[i] = ((Node) nameList.item(0)).getNodeValue();
+						//		entrees[i] =  menuitems.item(i).getNodeValue();
 	
 								Toast.makeText(getApplicationContext(), entrees[i], Toast.LENGTH_SHORT).show();
 							}
