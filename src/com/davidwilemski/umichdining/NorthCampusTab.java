@@ -1,10 +1,15 @@
 package com.davidwilemski.umichdining;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -32,42 +37,34 @@ public class NorthCampusTab extends ListActivity{
 		 ListView lv = getListView();
 		 lv.setTextFilterEnabled(true);
 		 
-		lv.setOnItemClickListener(new OnItemClickListener(){
+		 lv.setOnItemClickListener(new OnItemClickListener(){
 			 public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			 {
+				 
 			
 				 /* Will be filled and displayed later. */
-				 	String[] entrees = new String[30];
+				 	//String[] entrees = new String[30];
 					try {
-
-						URL url = new URL(
-								"http://housing.umich.edu/files/helper_files/js/menu2xml.php?location=BURSLEY%20DINING%20HALL&date=tomorrow");
-						DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-						DocumentBuilder db = dbf.newDocumentBuilder();
-						Document doc = db.parse(new InputSource(url.openStream()));
-						doc.getDocumentElement().normalize();
 						
-						//narrow document down to only meal tags
-						NodeList nodeList = doc.getElementsByTagName("meal");
+						String urlLocation = "http://roadrunner.davidwilemski.com/UMichDining/sample.json";
+						String response = "";
+						String line = "";
+						URL url = new URL(urlLocation);
+						BufferedReader input = new BufferedReader(new InputStreamReader(url.openStream()));
 						
-						for(int j = 0; j<nodeList.getLength(); j++){
-							Node node = nodeList.item(j);
-							Element tst = (Element) node;
-							NodeList menuitems = tst.getElementsByTagName("menuitem");
-							
-							
-							for (int i = 0; i < menuitems.getLength(); i++) {
-	
-								Element fstElmnt = (Element) node;
-								NodeList nameList = fstElmnt.getElementsByTagName("menuitem");
-								Element nameElement = (Element) nameList.item(i);
-								nameList = nameElement.getChildNodes();
-								entrees[i] = ((Node) nameList.item(0)).getNodeValue();
-						//		entrees[i] =  menuitems.item(i).getNodeValue();
-	
-								Toast.makeText(getApplicationContext(), entrees[i], Toast.LENGTH_SHORT).show();
-							}
+						while((line = input.readLine()) != null) {
+							response += line;
 						}
+						try{
+							JSONArray jArray = new JSONArray(response);
+							System.out.println(jArray.get(0).toString());
+							JSONArray place = new JSONArray(jArray.get(0).toString());
+							Toast.makeText(getApplicationContext(), "here", Toast.LENGTH_LONG).show();
+						} catch (JSONException e) {
+							System.out.println(e.getMessage());
+						}
+						
+						
 					}
 					catch (Exception e) {
 						System.out.println("XML Pasing Excpetion = " + e);
