@@ -20,7 +20,7 @@ public class UmichDining extends TabActivity {
 
         //North Campus Tab
         // Create an Intent to launch an Activity for the tab (to be reused)
-        intent = new Intent().setClass(this, NorthCampusTab.class);
+        intent = new Intent().setClass(this, CentralCampusTab.class);
 
         // Initialize a TabSpec for each tab and add it to the TabHost
         spec = tabHost.newTabSpec("central").setIndicator("Central Campus",
@@ -29,7 +29,7 @@ public class UmichDining extends TabActivity {
         tabHost.addTab(spec);
         
         //Central Campus Tab
-        intent = new Intent().setClass(this, NorthCampusTab.class);
+        intent = new Intent().setClass(this, HillTab.class);
 
         // Initialize a TabSpec for each tab and add it to the TabHost
         spec = tabHost.newTabSpec("hill").setIndicator("Hill Area",

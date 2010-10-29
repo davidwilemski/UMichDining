@@ -21,12 +21,12 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 
-public class NorthCampusTab extends ListActivity{
+public class HillTab extends ListActivity{
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		
-		 setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, NorthCampus));
+		 setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Hill));
 		 
 		
 		 ListView lv = getListView();
@@ -85,7 +85,7 @@ public class NorthCampusTab extends ListActivity{
 
 		
 	}
-	static final String[] NorthCampus = new String[] {
-		   "Bursley"
+	static final String[] Hill = new String[] {
+		   "Mary Markley", "Marketplace at HDC", "Oxford"
 		  };
 }

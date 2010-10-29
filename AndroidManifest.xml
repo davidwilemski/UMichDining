@@ -18,7 +18,10 @@
 		<activity android:name="DinnerActivity"></activity>
 		
 		<activity android:name="NorthCampusTab"></activity>
-    </application>
+    
+<activity android:name="CentralCampusTab"></activity>
+<activity android:name="HillTab"></activity>
+</application>
     <uses-sdk android:minSdkVersion="4" />
     
     
