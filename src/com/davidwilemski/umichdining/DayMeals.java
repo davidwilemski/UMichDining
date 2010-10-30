@@ -33,7 +33,7 @@ public class DayMeals extends TabActivity{
 
         // Initialize a TabSpec for each tab and add it to the TabHost
         spec = tabHost.newTabSpec("breakfast").setIndicator("Breakfast",
-                          res.getDrawable(android.R.drawable.ic_dialog_alert))
+                          res.getDrawable(R.drawable.ic_tab_breakfast))
                       .setContent(intent);
         tabHost.addTab(spec);
         
@@ -43,7 +43,7 @@ public class DayMeals extends TabActivity{
 
         // Initialize a TabSpec for each tab and add it to the TabHost
         spec = tabHost.newTabSpec("lunch").setIndicator("Lunch",
-                          res.getDrawable(android.R.drawable.ic_dialog_alert))
+                          res.getDrawable(R.drawable.ic_tab_lunch))
                       .setContent(intent);
         tabHost.addTab(spec);
         
@@ -53,7 +53,7 @@ public class DayMeals extends TabActivity{
 
         // Initialize a TabSpec for each tab and add it to the TabHost
         spec = tabHost.newTabSpec("dinner").setIndicator("Dinner",
-                          res.getDrawable(android.R.drawable.gallery_thumb))
+                          res.getDrawable(R.drawable.ic_tab_dinner))
                       .setContent(intent);
         tabHost.addTab(spec);
     }

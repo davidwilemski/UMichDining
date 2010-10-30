@@ -1,5 +1,9 @@
 package com.davidwilemski.umichdining;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,12 +15,14 @@ import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class CentralCampusTab extends ListActivity{
+public class CampusTab extends ListActivity{
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		
-		 setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, CentralCampus));
+		final String[] Campus = getIntent().getExtras().getStringArray("array");
+		
+		 setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, Campus));
 		 
 		
 		 ListView lv = getListView();
@@ -28,9 +34,10 @@ public class CentralCampusTab extends ListActivity{
 			 public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			 {
 				 DatabaseModel dbMod = new DatabaseModel(getApplicationContext());
-				 
+				 DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			     Date date = new Date();
 				 try {
-					 Cursor c = dbMod.getLocationMeal(CentralCampus[position], "2010-11-02", "breakfast");
+					 Cursor c = dbMod.getLocationMeal(Campus[position], dateFormat.format(date), "breakfast");
 					 String b, l, d;
 					 if(c.moveToFirst()) {
 						 b = c.getString(0);
@@ -38,14 +45,14 @@ public class CentralCampusTab extends ListActivity{
 						 b = "[\"No Menu Avaliable\"]";
 					 }
 					 
-					 c = dbMod.getLocationMeal(CentralCampus[position], "2010-11-02", "lunch");
+					 c = dbMod.getLocationMeal(Campus[position], dateFormat.format(date), "lunch");
 					 if(c.moveToFirst()) {
 						 l = c.getString(0);
 					 } else {
 						 l = "[\"No Menu Avaliable\"]";
 					 }
 					 
-					 c = dbMod.getLocationMeal(CentralCampus[position], "2010-11-02", "dinner");
+					 c = dbMod.getLocationMeal(Campus[position], dateFormat.format(date), "dinner");
 					 if(c.moveToFirst()) {
 						 d = c.getString(0);
 					 } else {
@@ -61,14 +68,10 @@ public class CentralCampusTab extends ListActivity{
 					 
 				 } catch (Exception e) {
 					 // TODO Error
-					Toast.makeText(getApplicationContext(), "Something went wrong in NorthCampusTab.", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(), "Something went wrong in Campus Tabs.", Toast.LENGTH_SHORT).show();
 				 }
 				 
 			 }
 		 });
 	}
-	
-	static final String[] CentralCampus = new String[] {
-		   "Betsy Barbour", "East Quad", "South Quad", "West Quad", "North Quad"
-	};
 }

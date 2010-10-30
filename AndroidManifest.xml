@@ -17,12 +17,13 @@
 		
 		
 		
-		<activity android:name="NorthCampusTab"></activity>
+		
     
-<activity android:name="CentralCampusTab"></activity>
-<activity android:name="HillTab"></activity>
+<activity android:name="CampusTab"></activity>
+
 <activity android:name="DayMeals"></activity>
 <activity android:name="MealActivity"></activity>
+
 </application>
     <uses-sdk android:minSdkVersion="4" />
     

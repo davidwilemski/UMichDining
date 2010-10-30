@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="hello">Hello World, UmichDining!</string>
+    
     <string name="app_name">UMich Dining</string>
-<string-array name="NorthCampus">
-<item>North Quad</item><item>Bursley</item>
-</string-array>
+
 </resources>

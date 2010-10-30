@@ -20,29 +20,32 @@ public class UmichDining extends TabActivity {
 
         //North Campus Tab
         // Create an Intent to launch an Activity for the tab (to be reused)
-        intent = new Intent().setClass(this, CentralCampusTab.class);
+        intent = new Intent().setClass(this, CampusTab.class);
+        intent.putExtra("array", CentralCampus);
 
         // Initialize a TabSpec for each tab and add it to the TabHost
         spec = tabHost.newTabSpec("central").setIndicator("Central Campus",
-                          res.getDrawable(android.R.drawable.ic_dialog_alert))
+                          res.getDrawable(R.drawable.ic_tab_central))
                       .setContent(intent);
         tabHost.addTab(spec);
         
         //Central Campus Tab
-        intent = new Intent().setClass(this, HillTab.class);
+        intent = new Intent().setClass(this, CampusTab.class);
+        intent.putExtra("array", Hill);
 
         // Initialize a TabSpec for each tab and add it to the TabHost
         spec = tabHost.newTabSpec("hill").setIndicator("Hill Area",
-                          res.getDrawable(android.R.drawable.ic_dialog_alert))
+                          res.getDrawable(R.drawable.ic_tab_hill))
                       .setContent(intent);
         tabHost.addTab(spec);
         
         //Central Campus Tab
-        intent = new Intent().setClass(this, NorthCampusTab.class);
+        intent = new Intent().setClass(this, CampusTab.class);
+        intent.putExtra("array", NorthCampus);
 
         // Initialize a TabSpec for each tab and add it to the TabHost
         spec = tabHost.newTabSpec("north").setIndicator("North Campus",
-                          res.getDrawable(android.R.drawable.gallery_thumb))
+                          res.getDrawable(R.drawable.ic_tab_north))
                       .setContent(intent);
         tabHost.addTab(spec);
         
@@ -55,4 +58,16 @@ public class UmichDining extends TabActivity {
 		c.moveToFirst();
 		Toast.makeText(getApplicationContext(), c.getString(0), Toast.LENGTH_LONG).show();*/
     }
+    
+    static final String[] NorthCampus = new String[] {
+		"Bursley"
+	};
+    
+	static final String[] CentralCampus = new String[] {
+		   "Betsy Barbour", "East Quad", "South Quad", "West Quad", "North Quad"
+	};
+	
+	static final String[] Hill = new String[] {
+		   "Mary Markley", "Marketplace at HDC", "Oxford"
+	};
 }

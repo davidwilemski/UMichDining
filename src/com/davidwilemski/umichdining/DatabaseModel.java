@@ -3,6 +3,9 @@ package com.davidwilemski.umichdining;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 
 import org.json.JSONException;
@@ -76,12 +79,14 @@ public class DatabaseModel extends SQLiteOpenHelper {
 	@SuppressWarnings("unchecked")
 	public void fetchData(Context context) {
 		try {
-			String urlLocation = "http://roadrunner.davidwilemski.com/UMichDining/sample.json";
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		    Date date = new Date();
+			String urlLocation = "http://roadrunner.davidwilemski.com/UMichDining/index.php/menu/getAllMenus/" + dateFormat.format(date);
 			String response = "";
 			String line = "";
 			URL url = new URL(urlLocation);
 			BufferedReader input = new BufferedReader(new InputStreamReader(url.openStream()));
-			
+		    //System.out.println(dateFormat.format(date));
 			while((line = input.readLine()) != null) {
 				response += line;
 			}
@@ -93,10 +98,13 @@ public class DatabaseModel extends SQLiteOpenHelper {
 					String item = (String) it.next();
 					JSONObject place = jO.optJSONObject(item);
 					//System.out.println(item);
-					this.insertRecord(item, "2010-11-02", "breakfast", place.getString("breakfast").toString());
+					if(place.has("breakfast"))
+						this.insertRecord(item, dateFormat.format(date), "breakfast", place.getString("breakfast").toString());
 					//System.out.println(place.getString("breakfast").toString());
-					this.insertRecord(item, "2010-11-02", "lunch", place.getString("lunch").toString());
-					this.insertRecord(item, "2010-11-02", "dinner", place.getString("dinner").toString());
+					if(place.has("lunch"))
+						this.insertRecord(item, dateFormat.format(date), "lunch", place.getString("lunch").toString());
+					if(place.has("dinner"))
+						this.insertRecord(item, dateFormat.format(date), "dinner", place.getString("dinner").toString());
 				}
 				//JSONObject place = new JSONObject(jO.getString("Bursley"));
 			} catch (JSONException e) {
