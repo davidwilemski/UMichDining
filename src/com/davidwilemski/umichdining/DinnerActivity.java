@@ -1,37 +1,33 @@
 package com.davidwilemski.umichdining;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import android.app.ListActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class DinnerActivity extends ListActivity{
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		
-		 setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, DinnerMenu));
-		 
-		 ListView lv = getListView();
-		 lv.setTextFilterEnabled(true);
-		 
-		 lv.setOnItemClickListener(new OnItemClickListener(){
-			 public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-			 {
-				 Toast.makeText(getApplicationContext(), "Do something to this item...", Toast.LENGTH_SHORT).show();
-			 }
-		 });
 
-		
+	     try {
+			JSONArray data = new JSONArray(getIntent().getExtras().getString("data"));
+			String[] NewMenu = new String[data.length()];
+			for(int i = 0; i < data.length(); i++) {
+				NewMenu[i] = data.getString(i);
+			}
+		     
+			 setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, NewMenu));
+			 
+			 ListView lv = getListView();
+			 lv.setTextFilterEnabled(true);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			Toast.makeText(getApplicationContext(), "Something went wrong in DinnerActivity.", Toast.LENGTH_SHORT).show();
+		}
 	}
-	
-	  static final String[] DinnerMenu = new String[] {
-		   "Milk", "Turkey", "Mashed Potatoes", "Gravy", "Stuffing", "Corn Bread"
-		  };
-	}
-
-
+}

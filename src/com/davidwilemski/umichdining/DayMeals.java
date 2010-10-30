@@ -6,53 +6,55 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.TabHost;
 
-public class UmichDining extends TabActivity {
-    /** Called when the activity is first created. */
+public class DayMeals extends TabActivity{
+	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
+        String b = getIntent().getExtras().getString("b");
+        String l = getIntent().getExtras().getString("l");
+        String d = getIntent().getExtras().getString("d");
+        /*String b = savedInstanceState.getString("b");
+        String l = savedInstanceState.getString("l");
+        String d = savedInstanceState.getString("d");*/
+        
         
         Resources res = getResources(); // Resource object to get Drawables
         TabHost tabHost = getTabHost();  // The activity TabHost
         TabHost.TabSpec spec;  // Resusable TabSpec for each tab
         Intent intent;  // Reusable Intent for each tab
 
-        //North Campus Tab
+        // Breakfast Tab
         // Create an Intent to launch an Activity for the tab (to be reused)
-        intent = new Intent().setClass(this, CentralCampusTab.class);
+        intent = new Intent().setClass(this, BreakfastActivity.class);
+        intent.putExtra("data", b);
 
         // Initialize a TabSpec for each tab and add it to the TabHost
-        spec = tabHost.newTabSpec("central").setIndicator("Central Campus",
+        spec = tabHost.newTabSpec("breakfast").setIndicator("Breakfast",
                           res.getDrawable(android.R.drawable.ic_dialog_alert))
                       .setContent(intent);
         tabHost.addTab(spec);
         
-        //Central Campus Tab
-        intent = new Intent().setClass(this, HillTab.class);
+        // Lunch Tab
+        intent = new Intent().setClass(this, LunchActivity.class);
+        intent.putExtra("data", l);
 
         // Initialize a TabSpec for each tab and add it to the TabHost
-        spec = tabHost.newTabSpec("hill").setIndicator("Hill Area",
+        spec = tabHost.newTabSpec("lunch").setIndicator("Lunch",
                           res.getDrawable(android.R.drawable.ic_dialog_alert))
                       .setContent(intent);
         tabHost.addTab(spec);
         
-        //Central Campus Tab
-        intent = new Intent().setClass(this, NorthCampusTab.class);
+        // Dinner Tab
+        intent = new Intent().setClass(this, DinnerActivity.class);
+        intent.putExtra("data", d);
 
         // Initialize a TabSpec for each tab and add it to the TabHost
-        spec = tabHost.newTabSpec("north").setIndicator("North Campus",
+        spec = tabHost.newTabSpec("dinner").setIndicator("Dinner",
                           res.getDrawable(android.R.drawable.gallery_thumb))
                       .setContent(intent);
         tabHost.addTab(spec);
-        
-        // Create the database and get data!
-        DatabaseModel dbMod = new DatabaseModel(getApplicationContext());
-        dbMod.fetchData(getApplicationContext());
-		/*dbMod.insertRecord("Bursley", "10/26/2010", "MENU_DATA");
-		 
-		Cursor c = dbMod.getLocationMeal("Bursley", "10/26/2010");
-		c.moveToFirst();
-		Toast.makeText(getApplicationContext(), c.getString(0), Toast.LENGTH_LONG).show();*/
     }
 }
