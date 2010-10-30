@@ -28,7 +28,7 @@ public class DayMeals extends TabActivity{
 
         // Breakfast Tab
         // Create an Intent to launch an Activity for the tab (to be reused)
-        intent = new Intent().setClass(this, BreakfastActivity.class);
+        intent = new Intent().setClass(this, MealActivity.class);
         intent.putExtra("data", b);
 
         // Initialize a TabSpec for each tab and add it to the TabHost
@@ -38,7 +38,7 @@ public class DayMeals extends TabActivity{
         tabHost.addTab(spec);
         
         // Lunch Tab
-        intent = new Intent().setClass(this, LunchActivity.class);
+        intent = new Intent().setClass(this, MealActivity.class);
         intent.putExtra("data", l);
 
         // Initialize a TabSpec for each tab and add it to the TabHost
@@ -48,7 +48,7 @@ public class DayMeals extends TabActivity{
         tabHost.addTab(spec);
         
         // Dinner Tab
-        intent = new Intent().setClass(this, DinnerActivity.class);
+        intent = new Intent().setClass(this, MealActivity.class);
         intent.putExtra("data", d);
 
         // Initialize a TabSpec for each tab and add it to the TabHost

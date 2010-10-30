@@ -57,10 +57,10 @@ public class DatabaseModel extends SQLiteOpenHelper {
 			cv.put(menu, newmenu);
 			db.insert(tbName, null, cv);
 		} else {
-			/*ContentValues cv = new ContentValues();
+			String changeID = c.getString(c.getColumnIndex(id));
+			ContentValues cv = new ContentValues();
 			cv.put(menu, newmenu);
-			int i = db.update(tbName, cv, location + "=? AND " + date + "=?" , new String[]{newlocation, newdate});
-			System.out.println("Changed " + i);*/
+			db.update(tbName, cv, id + "=?" , new String[]{changeID});
 		}
 		c.close();
 		db.close();

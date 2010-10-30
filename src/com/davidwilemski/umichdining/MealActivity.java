@@ -2,14 +2,13 @@ package com.davidwilemski.umichdining;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class LunchActivity extends ListActivity{
+public class MealActivity extends ListActivity{
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
@@ -27,7 +26,7 @@ public class LunchActivity extends ListActivity{
 			 lv.setTextFilterEnabled(true);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
-			Toast.makeText(getApplicationContext(), "Something went wrong in LunchActivity.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "Something went wrong in BreakfastActivity.", Toast.LENGTH_SHORT).show();
 		}
 	}
 }

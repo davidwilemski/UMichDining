@@ -13,15 +13,16 @@
         </activity>
 
 
-		<activity android:name="BreakfastActivity"></activity>
-		<activity android:name="LunchActivity"></activity>
-		<activity android:name="DinnerActivity"></activity>
+		
+		
+		
 		
 		<activity android:name="NorthCampusTab"></activity>
     
 <activity android:name="CentralCampusTab"></activity>
 <activity android:name="HillTab"></activity>
 <activity android:name="DayMeals"></activity>
+<activity android:name="MealActivity"></activity>
 </application>
     <uses-sdk android:minSdkVersion="4" />
     
