@@ -37,7 +37,7 @@ public class UmichDining extends TabActivity {
                       .setContent(intent);
         tabHost.addTab(spec);
         
-      //Central Campus Tab
+        //Central Campus Tab
         intent = new Intent().setClass(this, NorthCampusTab.class);
 
         // Initialize a TabSpec for each tab and add it to the TabHost

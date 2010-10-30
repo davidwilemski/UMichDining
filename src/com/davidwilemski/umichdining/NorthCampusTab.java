@@ -10,6 +10,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -17,6 +18,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import android.app.ListActivity;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,7 +33,7 @@ public class NorthCampusTab extends ListActivity{
 	{
 		super.onCreate(savedInstanceState);
 		
-		 setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, NorthCampus));
+		 setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, CentralCampus));
 		 
 		
 		 ListView lv = getListView();
@@ -40,13 +42,17 @@ public class NorthCampusTab extends ListActivity{
 		 lv.setOnItemClickListener(new OnItemClickListener(){
 			 public void onItemClick(AdapterView<?> parent, View view, int position, long id)
 			 {
+				 DatabaseModel dbMod = new DatabaseModel(getApplicationContext());
+				 dbMod.insertRecord("Bursley", "10/26/2010", "MENU_DATA");
 				 
-			
+				 Cursor c = dbMod.getLocationMeal("Bursley", "10/26/2010");
+				 c.moveToFirst();
+				 Toast.makeText(getApplicationContext(), c.getString(0), Toast.LENGTH_LONG).show();
 				 /* Will be filled and displayed later. */
 				 	//String[] entrees = new String[30];
 					try {
 						
-						String urlLocation = "http://roadrunner.davidwilemski.com/UMichDining/sample.json";
+						String urlLocation = "http://roadrunner.davidwilemski.com/UMichDining/index.php";
 						String response = "";
 						String line = "";
 						URL url = new URL(urlLocation);
@@ -55,11 +61,12 @@ public class NorthCampusTab extends ListActivity{
 						while((line = input.readLine()) != null) {
 							response += line;
 						}
+						//response += "";
 						try{
-							JSONArray jArray = new JSONArray(response);
-							System.out.println(jArray.get(0).toString());
-							JSONArray place = new JSONArray(jArray.get(0).toString());
-							Toast.makeText(getApplicationContext(), "here", Toast.LENGTH_LONG).show();
+							JSONObject jO = new JSONObject(response);
+							//System.out.println(jArray.get(0).toString());
+							JSONObject place = new JSONObject(jO.getString("Bursley"));
+							Toast.makeText(getApplicationContext(), place.getString("Breakfast").toString(), Toast.LENGTH_LONG).show();
 						} catch (JSONException e) {
 							System.out.println(e.getMessage());
 						}
@@ -70,19 +77,13 @@ public class NorthCampusTab extends ListActivity{
 						System.out.println("XML Pasing Excpetion = " + e);
 					}
 
-					
-					
-					
-					
-
-				 
 				//startActivity(intent);				 
 			 }
 		 });
 
 		
 	}
-	static final String[] NorthCampus = new String[] {
+	static final String[] CentralCampus = new String[] {
 		   "Bursley"
 		  };
 }
