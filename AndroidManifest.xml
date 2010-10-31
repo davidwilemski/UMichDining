@@ -24,6 +24,7 @@
 <activity android:name="DayMeals"></activity>
 <activity android:name="MealActivity"></activity>
 
+
 </application>
     <uses-sdk android:minSdkVersion="4" />
     

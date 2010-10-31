@@ -4,7 +4,10 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.TabHost;
+import android.widget.Toast;
 
 public class UmichDining extends TabActivity {
     /** Called when the activity is first created. */
@@ -57,6 +60,34 @@ public class UmichDining extends TabActivity {
 		Cursor c = dbMod.getLocationMeal("Bursley", "10/26/2010");
 		c.moveToFirst();
 		Toast.makeText(getApplicationContext(), c.getString(0), Toast.LENGTH_LONG).show();*/
+    }
+    
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        
+        menu.add(0, 0, 0, "Choose Date");
+        menu.add(0, 1, 1, "Refresh");
+        menu.add(0, 2, 2, "(-_-')");
+        
+        return true;
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	//System.out.println(item.getItemId());
+	    switch (item.getItemId()) {
+	       case 0:
+	    	   Toast.makeText(getApplicationContext(), "You found the date picker! :)", Toast.LENGTH_LONG).show();
+	    	   break;
+	       case 1:
+	           DatabaseModel dbMod = new DatabaseModel(getApplicationContext());
+	           dbMod.fetchData(getApplicationContext());
+	           Toast.makeText(getApplicationContext(), "Refreshing...", Toast.LENGTH_LONG).show();
+	           break;
+	       case 2: 
+	    	   Toast.makeText(getApplicationContext(), "We're glad you found this button fun to click.", Toast.LENGTH_LONG).show();
+	    	   break;
+	    }
+	    return true;
     }
     
     static final String[] NorthCampus = new String[] {
