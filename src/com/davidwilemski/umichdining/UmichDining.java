@@ -80,8 +80,8 @@ public class UmichDining extends TabActivity {
 	    	   break;
 	       case 1:
 	           DatabaseModel dbMod = new DatabaseModel(getApplicationContext());
-	           dbMod.fetchData(getApplicationContext());
 	           Toast.makeText(getApplicationContext(), "Refreshing...", Toast.LENGTH_LONG).show();
+	           dbMod.fetchData(getApplicationContext());
 	           break;
 	       case 2: 
 	    	   Toast.makeText(getApplicationContext(), "We're glad you found this button fun to click.", Toast.LENGTH_LONG).show();

@@ -76,6 +76,12 @@ public class DatabaseModel extends SQLiteOpenHelper {
 		return cur;
 	}
 	
+	public void clearDatabase() {
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.execSQL("DELETE FROM " + tbName + " WHERE " + id + "=" + id);
+		return;
+	}
+	
 	@SuppressWarnings("unchecked")
 	public void fetchData(Context context) {
 		try {
@@ -94,6 +100,7 @@ public class DatabaseModel extends SQLiteOpenHelper {
 				JSONObject jO = new JSONObject(response);
 				//System.out.println(jArray.get(0).toString());
 				Iterator it = jO.keys();
+				this.clearDatabase();
 				while(it.hasNext()) {
 					String item = (String) it.next();
 					JSONObject place = jO.optJSONObject(item);
