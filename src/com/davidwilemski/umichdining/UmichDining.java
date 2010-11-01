@@ -55,7 +55,8 @@ public class UmichDining extends TabActivity {
         // Create the database and get data!
         DatabaseModel dbMod = new DatabaseModel(getApplicationContext());
         dbMod.fetchData(getApplicationContext());
-		/*dbMod.insertRecord("Bursley", "10/26/2010", "MENU_DATA");
+        
+        /*dbMod.insertRecord("Bursley", "10/26/2010", "MENU_DATA");
 		 
 		Cursor c = dbMod.getLocationMeal("Bursley", "10/26/2010");
 		c.moveToFirst();
