@@ -1,6 +1,7 @@
 package com.davidwilemski.umichdining;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.DateFormat;
@@ -17,7 +18,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 public class DatabaseModel extends SQLiteOpenHelper {
 	static final String dbName = "umichdining";
@@ -85,60 +85,49 @@ public class DatabaseModel extends SQLiteOpenHelper {
 	}
 	
 	//@SuppressWarnings("unchecked")
-	public void fetchData(Context context) {
-		new DownloadDataClass().execute(this, context);
-	}
-	
-	public class DownloadDataClass extends AsyncTask<Object, Void, Context> {
-
-		@SuppressWarnings("unchecked")
-		protected Context doInBackground(Object... params) {
-			// TODO Auto-generated method stub
-			DatabaseModel db = (DatabaseModel) params[0];
-			Context context = (Context) params[1];
-			try {
-				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-			    Date date = new Date();
-				String urlLocation = "http://roadrunner.davidwilemski.com/UMichDining/index.php/menu/getAllMenus/" + dateFormat.format(date);
-				String response = "";
-				String line = "";
-				URL url = new URL(urlLocation);
-				BufferedReader input = new BufferedReader(new InputStreamReader(url.openStream()));
-			    //System.out.println(dateFormat.format(date));
-				while((line = input.readLine()) != null) {
-					response += line;
+	public int fetchData() {
+		//SQLiteDatabase db = this.getWritableDatabase();
+		try {
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		    Date date = new Date();
+			String urlLocation = "http://roadrunner.davidwilemski.com/UMichDining/index.php/menu/getAllMenus/" + dateFormat.format(date);
+			String response = "";
+			String line = "";
+			URL url = new URL(urlLocation);
+			BufferedReader input = new BufferedReader(new InputStreamReader(url.openStream()));
+		    //System.out.println(dateFormat.format(date));
+			while((line = input.readLine()) != null) {
+				response += line;
+			} try {
+				JSONObject jO = new JSONObject(response);
+				//System.out.println(jArray.get(0).toString());
+				Iterator it = jO.keys();
+				this.clearDatabase();
+				while(it.hasNext()) {
+					String item = (String) it.next();
+					JSONObject place = jO.optJSONObject(item);
+					//System.out.println(item);
+					if(place.has("breakfast"))
+						this.insertRecord(item, dateFormat.format(date), "breakfast", place.getString("breakfast").toString());
+					//System.out.println(place.getString("breakfast").toString());
+					if(place.has("lunch"))
+						this.insertRecord(item, dateFormat.format(date), "lunch", place.getString("lunch").toString());
+					if(place.has("dinner"))
+						this.insertRecord(item, dateFormat.format(date), "dinner", place.getString("dinner").toString());
 				}
-				try{
-					JSONObject jO = new JSONObject(response);
-					//System.out.println(jArray.get(0).toString());
-					Iterator it = jO.keys();
-					db.clearDatabase();
-					while(it.hasNext()) {
-						String item = (String) it.next();
-						JSONObject place = jO.optJSONObject(item);
-						//System.out.println(item);
-						if(place.has("breakfast"))
-							db.insertRecord(item, dateFormat.format(date), "breakfast", place.getString("breakfast").toString());
-						//System.out.println(place.getString("breakfast").toString());
-						if(place.has("lunch"))
-							db.insertRecord(item, dateFormat.format(date), "lunch", place.getString("lunch").toString());
-						if(place.has("dinner"))
-							db.insertRecord(item, dateFormat.format(date), "dinner", place.getString("dinner").toString());
-					}
-					//JSONObject place = new JSONObject(jO.getString("Bursley"));
-				} catch (JSONException e) {
-					System.out.println(e.getMessage());
-				}
-			} catch (Exception e) {
-				// TODO Error message
-				Toast.makeText(context, "Something went wrong refreshing the data.", Toast.LENGTH_SHORT).show();
+				//JSONObject place = new JSONObject(jO.getString("Bursley"));
+			} catch (JSONException e) {
+				//System.out.println(e.getMessage());
+				return -1;
 			}
-			return context;
+		} catch (Exception e) {
+			// TODO Error message
+			//Toast.makeText(cText, "Something went wrong refreshing the data.", Toast.LENGTH_SHORT).show();
+			return -1;
 		}
 		
-		protected void onPostExecute(Context context) {
-			Toast.makeText(context, "Refreshed!", Toast.LENGTH_SHORT);
-			return;
-		}
+		return 0;
 	}
+	
+	
 }

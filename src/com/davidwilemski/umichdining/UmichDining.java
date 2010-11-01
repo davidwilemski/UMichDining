@@ -1,11 +1,18 @@
 package com.davidwilemski.umichdining;
 
+import java.util.Calendar;
+
+import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.DatePicker;
 import android.widget.TabHost;
 import android.widget.Toast;
 
@@ -54,7 +61,8 @@ public class UmichDining extends TabActivity {
         
         // Create the database and get data!
         DatabaseModel dbMod = new DatabaseModel(getApplicationContext());
-        dbMod.fetchData(getApplicationContext());
+        //dbMod.fetchData();
+        new DownloadDataClass().execute(dbMod);
         
         /*dbMod.insertRecord("Bursley", "10/26/2010", "MENU_DATA");
 		 
@@ -67,8 +75,8 @@ public class UmichDining extends TabActivity {
         super.onCreateOptionsMenu(menu);
         
         menu.add(0, 0, 0, "Choose Date");
-        menu.add(0, 1, 1, "Refresh");
-        menu.add(0, 2, 2, "(-_-')");
+        menu.add(0, 1, 1, "Refresh (Today)");
+        menu.add(0, 2, 2, "About");
         
         return true;
     }
@@ -77,12 +85,16 @@ public class UmichDining extends TabActivity {
     	//System.out.println(item.getItemId());
 	    switch (item.getItemId()) {
 	       case 0:
-	    	   Toast.makeText(getApplicationContext(), "You found the date picker! :)", Toast.LENGTH_SHORT).show();
+	    	   //Toast.makeText(getApplicationContext(), "You found the date picker! :)", Toast.LENGTH_SHORT).show();
+	    	   final Calendar c = Calendar.getInstance();
+	    	   DatePickerDialog dp = new DatePickerDialog(this, dateListener, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+	    	   dp.show();
 	    	   break;
 	       case 1:
 	           DatabaseModel dbMod = new DatabaseModel(getApplicationContext());
-	           Toast.makeText(getApplicationContext(), "Refreshing...", Toast.LENGTH_SHORT).show();
-	           dbMod.fetchData(getApplicationContext());
+	           //Toast.makeText(getApplicationContext(), "Refreshing...", Toast.LENGTH_SHORT).show();
+	           //dbMod.fetchData();
+	           new DownloadDataClass().execute(dbMod);
 	           break;
 	       case 2: 
 	    	   Toast.makeText(getApplicationContext(), "We're glad you found this button fun to click.", Toast.LENGTH_SHORT).show();
@@ -90,6 +102,15 @@ public class UmichDining extends TabActivity {
 	    }
 	    return true;
     }
+    
+    private DatePickerDialog.OnDateSetListener dateListener = new DatePickerDialog.OnDateSetListener() {
+		
+		@Override
+		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+			// TODO Auto-generated method stub
+			Toast.makeText(getApplicationContext(), "You selected: " + year + "/" + monthOfYear + "/" + dayOfMonth + "." , Toast.LENGTH_SHORT);
+		}
+	};
     
     static final String[] NorthCampus = new String[] {
 		"Bursley"
@@ -102,4 +123,28 @@ public class UmichDining extends TabActivity {
 	static final String[] Hill = new String[] {
 		   "Mary Markley", "Marketplace at HDC", "Oxford"
 	};
+	
+	public class DownloadDataClass extends AsyncTask<DatabaseModel, Void, Integer> {
+		private final ProgressDialog dialog = new ProgressDialog(UmichDining.this);
+
+		protected void onPreExecute() {
+			this.dialog.setMessage("Fetching Data");
+			this.dialog.show();
+		}
+		
+		protected Integer doInBackground(DatabaseModel... params) {
+			DatabaseModel db = params[0];
+			Integer r = db.fetchData();
+			return r;
+		}
+		
+		protected void onPostExecute(Integer response) {
+			if(this.dialog.isShowing())
+				this.dialog.dismiss();
+
+			if(response != 0) {
+				Toast.makeText(getApplicationContext(), "Something went wrong getting data.", Toast.LENGTH_SHORT).show();
+			}
+		}
+	}
 }
