@@ -86,7 +86,7 @@ public class DatabaseModel extends SQLiteOpenHelper {
 	
 	//@SuppressWarnings("unchecked")
 	public void fetchData(Context context) {
-		new DownloadDataClass().execute(this);
+		new DownloadDataClass().execute(this, context);
 	}
 	
 	public class DownloadDataClass extends AsyncTask<Object, Void, Context> {
@@ -131,7 +131,7 @@ public class DatabaseModel extends SQLiteOpenHelper {
 				}
 			} catch (Exception e) {
 				// TODO Error message
-				//Toast.makeText(this, "Something went wrong Fetching the Data.", Toast.LENGTH_SHORT).show();
+				Toast.makeText(context, "Something went wrong refreshing the data.", Toast.LENGTH_SHORT).show();
 			}
 			return context;
 		}

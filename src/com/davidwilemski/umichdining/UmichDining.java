@@ -77,15 +77,15 @@ public class UmichDining extends TabActivity {
     	//System.out.println(item.getItemId());
 	    switch (item.getItemId()) {
 	       case 0:
-	    	   Toast.makeText(getApplicationContext(), "You found the date picker! :)", Toast.LENGTH_LONG).show();
+	    	   Toast.makeText(getApplicationContext(), "You found the date picker! :)", Toast.LENGTH_SHORT).show();
 	    	   break;
 	       case 1:
 	           DatabaseModel dbMod = new DatabaseModel(getApplicationContext());
-	           Toast.makeText(getApplicationContext(), "Refreshing...", Toast.LENGTH_LONG).show();
+	           Toast.makeText(getApplicationContext(), "Refreshing...", Toast.LENGTH_SHORT).show();
 	           dbMod.fetchData(getApplicationContext());
 	           break;
 	       case 2: 
-	    	   Toast.makeText(getApplicationContext(), "We're glad you found this button fun to click.", Toast.LENGTH_LONG).show();
+	    	   Toast.makeText(getApplicationContext(), "We're glad you found this button fun to click.", Toast.LENGTH_SHORT).show();
 	    	   break;
 	    }
 	    return true;
