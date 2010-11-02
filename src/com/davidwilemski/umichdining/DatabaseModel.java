@@ -1,6 +1,7 @@
 package com.davidwilemski.umichdining;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.DateFormat;
@@ -16,6 +17,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
 
 public class DatabaseModel extends SQLiteOpenHelper {
 	static final String dbName = "umichdining";
@@ -78,12 +80,13 @@ public class DatabaseModel extends SQLiteOpenHelper {
 	
 	public void clearDatabase() {
 		SQLiteDatabase db = this.getWritableDatabase();
-		db.execSQL("DELETE FROM " + tbName + " WHERE " + id + "=" + id);
+		db.execSQL("DELETE FROM " + tbName + " WHERE 1");
 		return;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public void fetchData(Context context) {
+	//@SuppressWarnings("unchecked")
+	public int fetchData() {
+		//SQLiteDatabase db = this.getWritableDatabase();
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		    Date date = new Date();
@@ -95,8 +98,7 @@ public class DatabaseModel extends SQLiteOpenHelper {
 		    //System.out.println(dateFormat.format(date));
 			while((line = input.readLine()) != null) {
 				response += line;
-			}
-			try{
+			} try {
 				JSONObject jO = new JSONObject(response);
 				//System.out.println(jArray.get(0).toString());
 				Iterator it = jO.keys();
@@ -115,11 +117,17 @@ public class DatabaseModel extends SQLiteOpenHelper {
 				}
 				//JSONObject place = new JSONObject(jO.getString("Bursley"));
 			} catch (JSONException e) {
-				System.out.println(e.getMessage());
+				//System.out.println(e.getMessage());
+				return -1;
 			}
 		} catch (Exception e) {
 			// TODO Error message
-			//Toast.makeText(this, "Something went wrong Fetching the Data.", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(cText, "Something went wrong refreshing the data.", Toast.LENGTH_SHORT).show();
+			return -1;
 		}
+		
+		return 0;
 	}
+	
+	
 }
