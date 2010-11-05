@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import android.app.DatePickerDialog;
 import android.app.TabActivity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.AsyncTask;
@@ -17,6 +18,8 @@ import android.widget.Toast;
 
 public class UmichDining extends TabActivity {
 	private boolean dd = false;
+	private static boolean initalLoad = false;
+	private static String date_string = "";
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -37,7 +40,7 @@ public class UmichDining extends TabActivity {
 		// Initialize a TabSpec for each tab and add it to the TabHost
 		spec = tabHost.newTabSpec("central").setIndicator("Central Campus",
 			res.getDrawable(R.drawable.ic_tab_central))
-			.setContent(intent);
+				.setContent(intent);
 		tabHost.addTab(spec);
 		
 		// Hill Campus Tab
@@ -47,7 +50,7 @@ public class UmichDining extends TabActivity {
 		// Initialize a TabSpec for each tab and add it to the TabHost
 		spec = tabHost.newTabSpec("hill").setIndicator("Hill Area",
 			res.getDrawable(R.drawable.ic_tab_hill))
-			.setContent(intent);
+				.setContent(intent);
 		tabHost.addTab(spec);
 		
 		// North Campus Tab
@@ -57,21 +60,16 @@ public class UmichDining extends TabActivity {
 		// Initialize a TabSpec for each tab and add it to the TabHost
 		spec = tabHost.newTabSpec("north").setIndicator("North Campus",
 			res.getDrawable(R.drawable.ic_tab_north))
-			.setContent(intent);
+				.setContent(intent);
 		tabHost.addTab(spec);
 		
 		// Create the database and get data!
 		DatabaseModel dbMod = new DatabaseModel(getApplicationContext());
-		//dbMod.fetchData();
-		//if(dd == null || dd.getStatus() == AsyncTask.Status.FINISHED)
-		if(!dd)
-			new DownloadDataClass().execute(dbMod);
-		
-		/*dbMod.insertRecord("Bursley", "10/26/2010", "MENU_DATA");
-		 
-		Cursor c = dbMod.getLocationMeal("Bursley", "10/26/2010");
-		c.moveToFirst();
-		Toast.makeText(getApplicationContext(), c.getString(0), Toast.LENGTH_LONG).show();*/
+		if(!dd) {
+			if(!initalLoad) {
+				new DownloadDataClass().execute(dbMod);
+			}
+		}
 	}
 	
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -81,18 +79,14 @@ public class UmichDining extends TabActivity {
 	}
 	
 	public boolean onOptionsItemSelected(MenuItem item) {
-		//System.out.println(item.getItemId());
 		switch (item.getItemId()) {
 			case R.id.date_picker:
-				//Toast.makeText(getApplicationContext(), "You found the date picker! :)", Toast.LENGTH_SHORT).show();
 				final Calendar c = Calendar.getInstance();
 				DatePickerDialog dp = new DatePickerDialog(this, dateListener, c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
 				dp.show();
 				break;
 			case R.id.refresh:
 				DatabaseModel dbMod = new DatabaseModel(getApplicationContext());
-				//Toast.makeText(getApplicationContext(), "Refreshing...", Toast.LENGTH_SHORT).show();
-				//dbMod.fetchData();
 				new DownloadDataClass().execute(dbMod);
 				break;
 			default:
@@ -105,7 +99,8 @@ public class UmichDining extends TabActivity {
 		@Override
 		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 			// TODO Auto-generated method stub
-			Toast.makeText(getApplicationContext(), "You selected: " + year + "/" + monthOfYear + "/" + dayOfMonth + "." , Toast.LENGTH_SHORT);
+			monthOfYear++;
+			date_string = year + "-" + monthOfYear + "-" + dayOfMonth;
 		}
 	};
 	
@@ -123,7 +118,9 @@ public class UmichDining extends TabActivity {
 		protected void onPostExecute(Integer response) {
 			Toast.makeText(getApplicationContext(), "Information Loaded!", Toast.LENGTH_SHORT).show();
 			dd = false;
+			initalLoad = true;
 			if(response != 0) {
+				initalLoad = false;
 				Toast.makeText(getApplicationContext(), "Something went wrong getting data.", Toast.LENGTH_SHORT).show();
 			}
 		}
