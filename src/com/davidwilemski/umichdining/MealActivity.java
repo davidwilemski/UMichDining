@@ -13,20 +13,20 @@ public class MealActivity extends ListActivity{
 	{
 		super.onCreate(savedInstanceState);
 
-	     try {
+		try {
 			JSONArray data = new JSONArray(getIntent().getExtras().getString("data"));
 			String[] NewMenu = new String[data.length()];
 			for(int i = 0; i < data.length(); i++) {
 				NewMenu[i] = data.getString(i);
 			}
 		     
-			 setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, NewMenu));
-			 
-			 ListView lv = getListView();
-			 lv.setTextFilterEnabled(true);
+			setListAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, NewMenu));
+			
+			ListView lv = getListView();
+			lv.setTextFilterEnabled(true);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
-			Toast.makeText(getApplicationContext(), "Something went wrong in BreakfastActivity.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getApplicationContext(), "Something went wrong in MealActivity.", Toast.LENGTH_SHORT).show();
 		}
 	}
 }

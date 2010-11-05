@@ -8,6 +8,11 @@
 package com.davidwilemski.umichdining;
 
 public final class R {
+    public static final class array {
+        public static final int CentralCampus=0x7f050001;
+        public static final int Hill=0x7f050002;
+        public static final int NorthCampus=0x7f050000;
+    }
     public static final class attr {
     }
     public static final class drawable {
@@ -20,11 +25,20 @@ public final class R {
         public static final int icon=0x7f020006;
         public static final int icon_blue=0x7f020007;
     }
+    public static final class id {
+        public static final int date_picker=0x7f070000;
+        public static final int refresh=0x7f070001;
+    }
     public static final class layout {
         public static final int main=0x7f030000;
     }
+    public static final class menu {
+        public static final int main_menu=0x7f060000;
+    }
     public static final class string {
-        public static final int app_name=0x7f040001;
-        public static final int id_choose_date=0x7f040000;
+        public static final int app_name=0x7f040003;
+        public static final int date_picker=0x7f040001;
+        public static final int id_choose_date=0x7f040002;
+        public static final int refresh=0x7f040000;
     }
 }
