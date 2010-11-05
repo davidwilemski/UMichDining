@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="refresh">Refresh</string>
+    <string name="date_picker">Choose Date</string>
     <string name="id_choose_date"></string>
     
     <string name="app_name">UMich Dining</string>
 
+<string-array name="NorthCampus"><item>Bursley</item>
+</string-array>
+<string-array name="CentralCampus"><item>Betsy Barbour</item>
+<item>East Quad</item>
+<item>South Quad</item>
+<item>West Quad</item>
+<item>North Quad</item>
+</string-array>
+<string-array name="Hill"><item>Mary Markley</item>
+<item>Marketplace at HDC</item>
+<item>Oxford</item>
+</string-array>
 </resources>

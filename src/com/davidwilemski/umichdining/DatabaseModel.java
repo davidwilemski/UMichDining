@@ -1,7 +1,6 @@
 package com.davidwilemski.umichdining;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.DateFormat;
@@ -17,7 +16,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.os.AsyncTask;
 
 public class DatabaseModel extends SQLiteOpenHelper {
 	static final String dbName = "umichdining";
@@ -85,6 +83,7 @@ public class DatabaseModel extends SQLiteOpenHelper {
 	}
 	
 	//@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	public int fetchData() {
 		//SQLiteDatabase db = this.getWritableDatabase();
 		try {
