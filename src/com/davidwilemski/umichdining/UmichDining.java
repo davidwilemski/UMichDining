@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.widget.TabHost;
 
 public class UmichDining extends MyTabActivity {
-	private boolean dd = false;
+	private static boolean initalData = false;
 	
 	/** Called when the activity is first created. */
 	@Override
@@ -52,20 +52,9 @@ public class UmichDining extends MyTabActivity {
 		
 		// Create the database and get data!
 		DatabaseModel dbMod = new DatabaseModel(getApplicationContext());
-		//dbMod.fetchData();
-		//if(dd == null || dd.getStatus() == AsyncTask.Status.FINISHED)
-		if(!dd){
+		if(!initalData){
 			new DownloadDataClass(getApplicationContext()).execute(dbMod);
-			dd = true;
+			initalData = true;
 		}
-		
-		/*dbMod.insertRecord("Bursley", "10/26/2010", "MENU_DATA");
-		 
-		Cursor c = dbMod.getLocationMeal("Bursley", "10/26/2010");
-		c.moveToFirst();
-		Toast.makeText(getApplicationContext(), c.getString(0), Toast.LENGTH_LONG).show();*/
 	}
-	
-
-	
 }
