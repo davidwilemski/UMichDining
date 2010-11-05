@@ -1,9 +1,10 @@
-9-30-2010
+11-4-2010
 
-Current state:
+Bryan and I got the Android app to a working state last weekend during Yahoo's Hack U event. The menu functions for the current day and we have a functioning refresh button to get the data feed again in case of failure.
 
-The layout of the app is mostly where I'd like it. I'm currently working on parsing XML for the menu. This is done in a tab activity - once I have parsing working I will do this in a separate thread. 
+The next steps will be to make the process that fetches data into a service that runs so that the UI is not blocked and to enable the currently broken date picker.
 
-I have been advised to store data in bundles to pass between activities.
-
-There is currently no settings menu when the menu button is pressed on the handset.
+Features that would be nice to have for the future:
+Notifications
+Facebook integration 
+User preferences
