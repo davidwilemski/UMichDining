@@ -16,9 +16,6 @@ public class DayMeals extends MyTabActivity{
         String b = getIntent().getExtras().getString("b");
         String l = getIntent().getExtras().getString("l");
         String d = getIntent().getExtras().getString("d");
-        /*String b = savedInstanceState.getString("b");
-        String l = savedInstanceState.getString("l");
-        String d = savedInstanceState.getString("d");*/
         
         
         Resources res = getResources(); // Resource object to get Drawables

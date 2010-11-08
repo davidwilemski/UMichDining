@@ -50,8 +50,9 @@ public class DatabaseModel extends SQLiteOpenHelper {
 		SQLiteDatabase db = this.getWritableDatabase();
 		// Check to make sure that the information isn't in the db already
 		// If it is, we update.
-		Cursor c = this.getLocationMeal(newlocation, newdate, newmeal);
-		if(!c.moveToFirst()) {
+		Cursor cur = db.query(tbName, new String[]{menu, id, meal}, location + "=? AND " + date + "=? AND " + meal + "=?", new String[]{newlocation, newdate, newmeal}, null, null, null);
+		//String c = this.getLocationMeal(newlocation, newdate, newmeal);
+		if(!cur.moveToFirst()) {
 			ContentValues cv = new ContentValues();
 			cv.put(location, newlocation);
 			cv.put(date, newdate);
@@ -59,20 +60,27 @@ public class DatabaseModel extends SQLiteOpenHelper {
 			cv.put(menu, newmenu);
 			db.insert(tbName, null, cv);
 		} else {
-			String changeID = c.getString(c.getColumnIndex(id));
+			String changeID = cur.getString(cur.getColumnIndex(id));
 			ContentValues cv = new ContentValues();
 			cv.put(menu, newmenu);
 			db.update(tbName, cv, id + "=?" , new String[]{changeID});
 		}
-		c.close();
+		cur.close();
 		db.close();
 	}
 	
-	public Cursor getLocationMeal(String currLocation, String currDate, String currMeal) {
+	public String getLocationMeal(String currLocation, String currDate, String currMeal) {
 		SQLiteDatabase db = this.getReadableDatabase();
 		Cursor cur = db.query(tbName, new String[]{menu, id, meal}, location + "=? AND " + date + "=? AND " + meal + "=?", new String[]{currLocation, currDate, currMeal}, null, null, null);
-		//db.close();
-		return cur;
+		String rString;
+		if(cur.moveToFirst()) {
+			rString = cur.getString(0);
+		} else {
+			rString = "[\"No Menu Avaliable\"]";
+		}
+		cur.close();
+		db.close();
+		return rString;
 	}
 	
 	public void clearDatabase() {
