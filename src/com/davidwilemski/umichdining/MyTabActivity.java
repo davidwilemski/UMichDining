@@ -47,7 +47,16 @@ public abstract class MyTabActivity extends TabActivity{
 			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 			SharedPreferences.Editor editor = settings.edit();
 			monthOfYear++;
-			editor.putString("DATE", year + "-" + monthOfYear + "-" + dayOfMonth);
+			String month, day;
+			if(monthOfYear < 10)
+				month = "0" + monthOfYear;
+			else
+				month = monthOfYear + "";
+			if(dayOfMonth < 10)
+				day = "0" + dayOfMonth;
+			else
+				day = dayOfMonth + "";
+			editor.putString("DATE", year + "-" + month + "-" + day);
 			editor.commit();
 			DatabaseModel dbMod = new DatabaseModel(getApplicationContext());
 			new DownloadDataClass(getApplicationContext()).execute(dbMod, settings.getString("DATE", "NONE"));

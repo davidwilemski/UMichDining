@@ -3,6 +3,9 @@ package com.davidwilemski.umichdining;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Iterator;
 
 import org.json.JSONException;
@@ -90,6 +93,21 @@ public class DatabaseModel extends SQLiteOpenHelper {
 		return;
 	}
 	
+	public void cleanOldDates() {
+		Calendar c = Calendar.getInstance();
+		SQLiteDatabase db = this.getWritableDatabase();
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		c.add(Calendar.DATE, -1);
+	    String yesterday = dateFormat.format(c.getTime());
+	    Cursor cur = db.query(tbName, new String[]{id, date}, date + "=?", new String[]{"" + yesterday + ""}, null, null, id + " desc");
+
+	    if(cur.moveToFirst()) {
+		    db.execSQL("DELETE FROM " + tbName + " WHERE " + id + " <= " + cur.getString(cur.getColumnIndex(id)));
+	    }
+	    cur.close();
+	    db.close();
+	}
+	
 	@SuppressWarnings("unchecked")
 	public int fetchData(String d) {
 		//SQLiteDatabase db = this.getWritableDatabase();
@@ -106,7 +124,8 @@ public class DatabaseModel extends SQLiteOpenHelper {
 				JSONObject jO = new JSONObject(response);
 				//System.out.println(jArray.get(0).toString());
 				Iterator it = jO.keys();
-				this.clearDatabase();
+				this.cleanOldDates();
+				//this.clearDatabase();
 				while(it.hasNext()) {
 					String item = (String) it.next();
 					JSONObject place = jO.optJSONObject(item);

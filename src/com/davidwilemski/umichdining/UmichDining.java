@@ -66,6 +66,7 @@ public class UmichDining extends MyTabActivity {
 		// Create the database and get data!
 		DatabaseModel dbMod = new DatabaseModel(getApplicationContext());
 		if(!initalData){
+			dbMod.clearDatabase();
 			new DownloadDataClass(getApplicationContext()).execute(dbMod, settings.getString("DATE", "NONE"));
 			initalData = true;
 		}
