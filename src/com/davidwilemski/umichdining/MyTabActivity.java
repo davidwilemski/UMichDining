@@ -2,17 +2,17 @@ package com.davidwilemski.umichdining;
 
 import java.util.Calendar;
 
-import com.davidwilemski.umichdining.DownloadDataClass;
-
 import android.app.DatePickerDialog;
 import android.app.TabActivity;
+import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.DatePicker;
-import android.widget.Toast;
 
 public abstract class MyTabActivity extends TabActivity{
+	public static final String PREFS_NAME = "UmichPrefFile";
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -34,7 +34,8 @@ public abstract class MyTabActivity extends TabActivity{
 				DatabaseModel dbMod = new DatabaseModel(getApplicationContext());
 				//Toast.makeText(getApplicationContext(), "Refreshing...", Toast.LENGTH_SHORT).show();
 				//dbMod.fetchData();
-				new DownloadDataClass(getApplicationContext()).execute(dbMod);
+				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+				new DownloadDataClass(getApplicationContext()).execute(dbMod, settings.getString("DATE", "NONE"));
 				break;
 			default:
 				return super.onOptionsItemSelected(item);
@@ -45,11 +46,12 @@ public abstract class MyTabActivity extends TabActivity{
 	private DatePickerDialog.OnDateSetListener dateListener = new DatePickerDialog.OnDateSetListener() {
 		@Override
 		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-			// TODO Auto-generated method stub
-			Toast.makeText(getApplicationContext(), "You selected: " + year + "/" + monthOfYear + "/" + dayOfMonth + "." , Toast.LENGTH_SHORT);
+			//Toast.makeText(getApplicationContext(), "You selected: " + year + "/" + monthOfYear + "/" + dayOfMonth + "." , Toast.LENGTH_SHORT);
+			SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+			SharedPreferences.Editor editor = settings.edit();
+			monthOfYear++;
+			editor.putString("DATE", year + "-" + monthOfYear + "-" + dayOfMonth);
+			editor.commit();
 		}
-	};
-	
-	protected static String date_string = "";
-	
+	};	
 }

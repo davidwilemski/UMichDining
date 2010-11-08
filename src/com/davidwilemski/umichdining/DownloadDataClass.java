@@ -4,7 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-public class DownloadDataClass extends AsyncTask<DatabaseModel, Void, Integer> {	
+public class DownloadDataClass extends AsyncTask<Object, Void, Integer> {	
 	protected Context ctx;
 	protected int dd;
 	protected DownloadDataClass(Context c){
@@ -14,9 +14,10 @@ public class DownloadDataClass extends AsyncTask<DatabaseModel, Void, Integer> {
 		
 	}
 	
-	protected Integer doInBackground(DatabaseModel... params) {
-		DatabaseModel db = params[0];
-		Integer r = db.fetchData();
+	protected Integer doInBackground(Object... params) {
+		DatabaseModel db = (DatabaseModel) params[0];
+		String date = (String) params[1];
+		Integer r = db.fetchData(date);
 		return r;
 	}
 	

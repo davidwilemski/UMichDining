@@ -3,9 +3,6 @@ package com.davidwilemski.umichdining;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Iterator;
 
 import org.json.JSONException;
@@ -25,6 +22,8 @@ public class DatabaseModel extends SQLiteOpenHelper {
 	static final String date = "date";
 	static final String meal = "meal";
 	static final String menu = "menu";
+	public static final String PREFS_NAME = "UmichPrefFile";
+	//public final SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 	
 	public DatabaseModel(Context context) {
 		super(context, dbName, null, 1); // Version number is the last one
@@ -79,17 +78,15 @@ public class DatabaseModel extends SQLiteOpenHelper {
 	public void clearDatabase() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.execSQL("DELETE FROM " + tbName + " WHERE 1");
+		db.close();
 		return;
 	}
 	
-	//@SuppressWarnings("unchecked")
 	@SuppressWarnings("unchecked")
-	public int fetchData() {
+	public int fetchData(String d) {
 		//SQLiteDatabase db = this.getWritableDatabase();
 		try {
-			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		    Date date = new Date();
-			String urlLocation = "http://roadrunner.davidwilemski.com/UMichDining/index.php/menu/getAllMenus/" + dateFormat.format(date);
+			String urlLocation = "http://roadrunner.davidwilemski.com/UMichDining/index.php/menu/getAllMenus/" + d;
 			String response = "";
 			String line = "";
 			URL url = new URL(urlLocation);
@@ -107,12 +104,12 @@ public class DatabaseModel extends SQLiteOpenHelper {
 					JSONObject place = jO.optJSONObject(item);
 					//System.out.println(item);
 					if(place.has("breakfast"))
-						this.insertRecord(item, dateFormat.format(date), "breakfast", place.getString("breakfast").toString());
+						this.insertRecord(item, d, "breakfast", place.getString("breakfast").toString());
 					//System.out.println(place.getString("breakfast").toString());
 					if(place.has("lunch"))
-						this.insertRecord(item, dateFormat.format(date), "lunch", place.getString("lunch").toString());
+						this.insertRecord(item, d, "lunch", place.getString("lunch").toString());
 					if(place.has("dinner"))
-						this.insertRecord(item, dateFormat.format(date), "dinner", place.getString("dinner").toString());
+						this.insertRecord(item, d, "dinner", place.getString("dinner").toString());
 				}
 				//JSONObject place = new JSONObject(jO.getString("Bursley"));
 			} catch (JSONException e) {

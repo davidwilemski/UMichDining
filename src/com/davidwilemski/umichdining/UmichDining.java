@@ -1,6 +1,11 @@
 package com.davidwilemski.umichdining;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.TabHost;
@@ -50,10 +55,18 @@ public class UmichDining extends MyTabActivity {
 				.setContent(intent);
 		tabHost.addTab(spec);
 		
+		// Initialize settings
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    Date date = new Date();
+	    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putString("DATE", dateFormat.format(date));
+		editor.commit();
+	    
 		// Create the database and get data!
 		DatabaseModel dbMod = new DatabaseModel(getApplicationContext());
 		if(!initalData){
-			new DownloadDataClass(getApplicationContext()).execute(dbMod);
+			new DownloadDataClass(getApplicationContext()).execute(dbMod, settings.getString("DATE", "NONE"));
 			initalData = true;
 		}
 	}
