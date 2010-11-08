@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.DatePicker;
 
 public abstract class MyTabActivity extends TabActivity{
@@ -50,7 +51,9 @@ public abstract class MyTabActivity extends TabActivity{
 			editor.commit();
 			DatabaseModel dbMod = new DatabaseModel(getApplicationContext());
 			new DownloadDataClass(getApplicationContext()).execute(dbMod, settings.getString("DATE", "NONE"));
-			
+			View w = getCurrentFocus();
+			if(w.getContext().toString().contains("com.davidwilemski.umichdining.MealActivity"))
+				finish();
 		}
 	};	
 }
