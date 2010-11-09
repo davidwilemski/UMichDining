@@ -1,6 +1,8 @@
 package com.davidwilemski.umichdining;
 
 
+import java.util.Calendar;
+
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -53,5 +55,13 @@ public class DayMeals extends MyTabActivity{
                           res.getDrawable(R.drawable.ic_tab_dinner))
                       .setContent(intent);
         tabHost.addTab(spec);
+        
+        Calendar c = Calendar.getInstance();
+        if(c.get(Calendar.HOUR_OF_DAY) < 10)
+        	tabHost.setCurrentTab(0);
+        else if(c.get(Calendar.HOUR_OF_DAY) < 17)
+        	tabHost.setCurrentTab(1);
+        else if(c.get(Calendar.HOUR_OF_DAY) >= 17)
+        	tabHost.setCurrentTab(2);
     }
 }
