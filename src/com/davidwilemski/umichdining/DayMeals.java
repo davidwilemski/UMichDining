@@ -4,6 +4,7 @@ package com.davidwilemski.umichdining;
 import java.util.Calendar;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.widget.TabHost;
@@ -22,7 +23,7 @@ public class DayMeals extends MyTabActivity{
         
         Resources res = getResources(); // Resource object to get Drawables
         TabHost tabHost = getTabHost();  // The activity TabHost
-        TabHost.TabSpec spec;  // Resusable TabSpec for each tab
+        TabHost.TabSpec spec;  // Reusable TabSpec for each tab
         Intent intent;  // Reusable Intent for each tab
 
         // Breakfast Tab
@@ -56,12 +57,24 @@ public class DayMeals extends MyTabActivity{
                       .setContent(intent);
         tabHost.addTab(spec);
         
-        Calendar c = Calendar.getInstance();
-        if(c.get(Calendar.HOUR_OF_DAY) < 10)
-        	tabHost.setCurrentTab(0);
-        else if(c.get(Calendar.HOUR_OF_DAY) < 17)
-        	tabHost.setCurrentTab(1);
-        else if(c.get(Calendar.HOUR_OF_DAY) >= 17)
-        	tabHost.setCurrentTab(2);
+        //Set the current tab
+        tabHost.setCurrentTab(getMealTab());
+    }
+    //Check if there are SharedPreferences for when meals switch
+    //otherwise return defaults
+    //return the tab number based on what time it is
+    int getMealTab(){
+    	//check for preferences
+    	SharedPreferences sp = this.getPreferences(MODE_PRIVATE);
+    
+    	Calendar c = Calendar.getInstance();
+        if(c.get(Calendar.HOUR_OF_DAY) < sp.getInt("breakfast", 10))
+        	return 0;
+        else if(c.get(Calendar.HOUR_OF_DAY) < sp.getInt("lunch", 15))
+        	return(1);
+        else if(c.get(Calendar.HOUR_OF_DAY) >= sp.getInt("dinner", 15))
+        	return(2);
+        else //Default to breakfast
+        	return 0;
     }
 }
