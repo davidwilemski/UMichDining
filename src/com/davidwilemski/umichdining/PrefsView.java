@@ -37,26 +37,20 @@ public class PrefsView extends PreferenceActivity {
 	public static final String CONSUMER_SECRET = "omL1ZoIF2ehXv6yXbvwov5DuexG5bxgNbye62BNIB0w";
 	public static final String CALLBACK_URL = "umichdining://twitter";
 	
-	CommonsHttpOAuthConsumer consumer = null;
+	CommonsHttpOAuthConsumer consumer = new CommonsHttpOAuthConsumer(  
+	        CONSUMER_KEY, CONSUMER_SECRET);;
 	  
-	OAuthProvider provider = null;  
+	OAuthProvider provider = new CommonsHttpOAuthProvider(
+			"http://twitter.com/oauth/request_token", 
+			"http://twitter.com/oauth/access_token",  
+	        "http://twitter.com/oauth/authorize");;  
 	
-	HttpClient client = null; 
+	HttpClient client = new DefaultHttpClient();
 	
 	SharedPreferences settings = null;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		consumer = new CommonsHttpOAuthConsumer(  
-		        CONSUMER_KEY, CONSUMER_SECRET);
-		
-		provider = new CommonsHttpOAuthProvider(
-				"http://twitter.com/oauth/request_token", 
-				"http://twitter.com/oauth/access_token",  
-		        "http://twitter.com/oauth/authorize");
-		
-		client = new DefaultHttpClient();
 		
 		addPreferencesFromResource(R.xml.preferences);
 		settings = getSharedPreferences(PREFS_NAME, 0);

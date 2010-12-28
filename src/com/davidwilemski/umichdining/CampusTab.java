@@ -42,6 +42,7 @@ public class CampusTab extends ListActivity {
 					intent.putExtra("b", b);
 					intent.putExtra("l", l);
 					intent.putExtra("d", d);
+					intent.putExtra("location", campus[position]);
 					startActivity(intent);
 					 
 				} catch (Exception e) {

@@ -19,7 +19,7 @@ public class DayMeals extends MyTabActivity{
         String b = getIntent().getExtras().getString("b");
         String l = getIntent().getExtras().getString("l");
         String d = getIntent().getExtras().getString("d");
-        
+        String location = getIntent().getExtras().getString("location");
         
         Resources res = getResources(); // Resource object to get Drawables
         TabHost tabHost = getTabHost();  // The activity TabHost
@@ -30,6 +30,7 @@ public class DayMeals extends MyTabActivity{
         // Create an Intent to launch an Activity for the tab (to be reused)
         intent = new Intent().setClass(this, MealActivity.class);
         intent.putExtra("data", b);
+        intent.putExtra("location", location);
 
         // Initialize a TabSpec for each tab and add it to the TabHost
         spec = tabHost.newTabSpec("breakfast").setIndicator("Breakfast",
@@ -40,6 +41,7 @@ public class DayMeals extends MyTabActivity{
         // Lunch Tab
         intent = new Intent().setClass(this, MealActivity.class);
         intent.putExtra("data", l);
+        intent.putExtra("location", location);
 
         // Initialize a TabSpec for each tab and add it to the TabHost
         spec = tabHost.newTabSpec("lunch").setIndicator("Lunch",
@@ -50,6 +52,7 @@ public class DayMeals extends MyTabActivity{
         // Dinner Tab
         intent = new Intent().setClass(this, MealActivity.class);
         intent.putExtra("data", d);
+        intent.putExtra("location", location);
 
         // Initialize a TabSpec for each tab and add it to the TabHost
         spec = tabHost.newTabSpec("dinner").setIndicator("Dinner",
