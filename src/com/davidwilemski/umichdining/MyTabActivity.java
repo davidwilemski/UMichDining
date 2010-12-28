@@ -2,13 +2,6 @@ package com.davidwilemski.umichdining;
 
 import java.util.Calendar;
 
-import oauth.signpost.OAuthProvider;
-import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
-import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
-
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
-
 import android.app.DatePickerDialog;
 import android.app.TabActivity;
 import android.content.Intent;

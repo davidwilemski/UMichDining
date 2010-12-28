@@ -51,8 +51,14 @@ public class PrefsView extends PreferenceActivity {
 					// We are turning twitter on...
 					Toast.makeText(getApplicationContext(), "Turning on Twitter", Toast.LENGTH_SHORT).show();
 					String authUrl = null;
+					provider.setOAuth10a(true);	
 					try {
 						authUrl = provider.retrieveRequestToken(consumer, CALLBACK_URL);
+						if(consumer.getToken() != null)
+							editor.putString("REQUEST_TOKEN", consumer.getToken());
+						if(consumer.getTokenSecret() != null)
+							editor.putString("REQUEST_SECRET", consumer.getTokenSecret());
+						editor.commit();
 					} catch (OAuthMessageSignerException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -81,9 +87,13 @@ public class PrefsView extends PreferenceActivity {
 		super.onResume();
 		Uri uri = this.getIntent().getData();  
 		if (uri != null && uri.toString().startsWith(CALLBACK_URL)) {  
-		    String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);  
+		    String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);
+		    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 		    // this will populate token and token_secret in consumer  
 		    try {
+		    	if(!(settings.getString("REQUEST_TOKEN", null) == null || settings.getString("REQUEST_SECRET", null) == null)) {
+					consumer.setTokenWithSecret(settings.getString("REQUEST_TOKEN", null), settings.getString("REQUEST_SECRET", null));
+				}
 				provider.retrieveAccessToken(consumer, verifier);
 			} catch (OAuthMessageSignerException e) {
 				// TODO Auto-generated catch block
