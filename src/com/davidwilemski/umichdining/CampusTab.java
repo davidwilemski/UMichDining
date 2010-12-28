@@ -26,7 +26,7 @@ public class CampusTab extends ListActivity {
 		final Intent intent = new Intent();
 		intent.setClass(this, DayMeals.class);
 		 
-		lv.setOnItemClickListener(new OnItemClickListener(){
+		lv.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				DatabaseModel dbMod = new DatabaseModel(getApplicationContext());
 				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
