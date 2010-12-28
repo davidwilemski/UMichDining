@@ -2,6 +2,7 @@ package com.davidwilemski.umichdining;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -24,8 +25,9 @@ public class MealActivity extends ListActivity{
 			
 			ListView lv = getListView();
 			lv.setTextFilterEnabled(true);
+			
+			
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			Toast.makeText(getApplicationContext(), "Something went wrong in MealActivity.", Toast.LENGTH_SHORT).show();
 		}
 	}

@@ -5,17 +5,14 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
-import oauth.signpost.OAuth;
 import oauth.signpost.OAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
-import oauth.signpost.exception.OAuthNotAuthorizedException;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -27,7 +24,6 @@ import org.apache.http.protocol.HTTP;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -41,113 +37,106 @@ public class PrefsView extends PreferenceActivity {
 	public static final String CONSUMER_SECRET = "omL1ZoIF2ehXv6yXbvwov5DuexG5bxgNbye62BNIB0w";
 	public static final String CALLBACK_URL = "umichdining://twitter";
 	
-	CommonsHttpOAuthConsumer consumer = new CommonsHttpOAuthConsumer(  
-	        CONSUMER_KEY, CONSUMER_SECRET);  
+	CommonsHttpOAuthConsumer consumer = null;
 	  
-	OAuthProvider provider = new CommonsHttpOAuthProvider(
-			"http://twitter.com/oauth/request_token", 
-			"http://twitter.com/oauth/access_token",  
-	        "http://twitter.com/oauth/authorize");  
+	OAuthProvider provider = null;  
 	
-	HttpClient client = new DefaultHttpClient(); 
+	HttpClient client = null; 
+	
+	SharedPreferences settings = null;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		consumer = new CommonsHttpOAuthConsumer(  
+		        CONSUMER_KEY, CONSUMER_SECRET);
+		
+		provider = new CommonsHttpOAuthProvider(
+				"http://twitter.com/oauth/request_token", 
+				"http://twitter.com/oauth/access_token",  
+		        "http://twitter.com/oauth/authorize");
+		
+		client = new DefaultHttpClient();
+		
 		addPreferencesFromResource(R.xml.preferences);
+		settings = getSharedPreferences(PREFS_NAME, 0);
 		
 		Preference twitter_pref = findPreference("TWITTER");
 		twitter_pref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 			public boolean onPreferenceClick(Preference preference) {
-				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 				SharedPreferences.Editor editor = settings.edit();
 				boolean new_setting = !settings.getBoolean("TWITTER", false);
 				if(new_setting) {
 					// We are turning twitter on...
-					Toast.makeText(getApplicationContext(), "Turning on Twitter", Toast.LENGTH_SHORT).show();
-					if(settings.getString("USER_TOKEN", null) == null || settings.getString("USER_SECRET", null) == null) {
-						// If we don't have the user's tokens, we must get them. :)
-						String authUrl = null;
-						provider.setOAuth10a(true);	
-						try {
-							authUrl = provider.retrieveRequestToken(consumer, CALLBACK_URL);
-							if(consumer.getToken() != null)
-								editor.putString("REQUEST_TOKEN", consumer.getToken());
-							if(consumer.getTokenSecret() != null)
-								editor.putString("REQUEST_SECRET", consumer.getTokenSecret());
-							editor.commit();
-						} catch (OAuthMessageSignerException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (OAuthNotAuthorizedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (OAuthExpectationFailedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (OAuthCommunicationException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}  
-						startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(authUrl))); 
-					} else {
-						// Let's try something silly... post an update?
-						// create a request that requires authentication  
-						HttpPost post = new HttpPost("http://twitter.com/statuses/update.xml");  
-						final List<NameValuePair> nvps = new ArrayList<NameValuePair>();  
-						// 'status' here is the update value you collect from UI  
-						nvps.add(new BasicNameValuePair("status", "Test Message! :D"));  
-						try {
-							post.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
-						} catch (UnsupportedEncodingException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}  
-						// set this to avoid 417 error (Expectation Failed)  
-						post.getParams().setBooleanParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false);  
-						// sign the request  
-						try {
-							consumer.sign(post);
-						} catch (OAuthMessageSignerException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (OAuthExpectationFailedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (OAuthCommunicationException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}  
-						// send the request  
-						HttpResponse response = null;
-						try {
-							response = client.execute(post);
-						} catch (ClientProtocolException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}  
-						// response status should be 200 OK  
-						int statusCode = response.getStatusLine().getStatusCode();  
-						final String reason = response.getStatusLine().getReasonPhrase();  
-						// release connection  
-						try {
-							response.getEntity().consumeContent();
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}  
-						if (statusCode != 200) {  
-						    Log.e("TwitterConnector", reason);  
-						    //throw new OAuthNotAuthorizedException();  
-						}  
-					}
+					Toast.makeText(getBaseContext(), "Turning on Twitter", Toast.LENGTH_SHORT).show();
+					String token = settings.getString("USER_TOKEN", null);
+					String secret = settings.getString("USER_SECRET", null);
+					if(token == null || secret == null) // Then we need to authenticate
+						startActivity(new Intent(getApplicationContext(), TwitterAuthActivity.class));
 				} else {
 					// We are turning twitter off...
-					Toast.makeText(getApplicationContext(), "Turning off Twitter", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getBaseContext(), "Turning off Twitter", Toast.LENGTH_SHORT).show();
 					editor.putBoolean("TWITTER", false);
 					editor.commit();
+				}
+				return true;
+			}
+		});
+		
+		Preference twitter_test = findPreference("TWITTER_TEST");
+		twitter_test.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+			public boolean onPreferenceClick(Preference preference) {
+				String token = settings.getString("USER_TOKEN", null);
+				String secret = settings.getString("USER_SECRET", null);
+				if(!(token == null || secret == null)) { // We have authentication
+					HttpPost post = new HttpPost("http://twitter.com/statuses/update.xml");  
+					final List<BasicNameValuePair> nvps = new ArrayList<BasicNameValuePair>(); 
+					nvps.add(new BasicNameValuePair("status", "Another Test Message."));  
+					try {
+						post.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
+					} catch (UnsupportedEncodingException e3) {
+						e3.printStackTrace();
+					}  
+					// set this to avoid 417 error (Expectation Failed)  
+					post.getParams().setBooleanParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false); 
+					
+					// sign the request  
+					try {
+						Log.d("OAUTH", "Used OAuth token: " + consumer.getToken());
+						Log.d("OAUTH", "Used OAuth secret: " + consumer.getTokenSecret());
+						consumer.sign(post);
+					} catch (OAuthMessageSignerException e2) {
+						e2.printStackTrace();
+					} catch (OAuthExpectationFailedException e2) {
+						e2.printStackTrace();
+					} catch (OAuthCommunicationException e2) {
+						e2.printStackTrace();
+					}  
+					// send the request  
+					HttpResponse response = null;
+					try {
+						response = client.execute(post);
+					} catch (ClientProtocolException e1) {
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}  
+					// response status should be 200 OK  
+					int statusCode = response.getStatusLine().getStatusCode();  
+					final String reason = response.getStatusLine().getReasonPhrase();  
+					// release connection  
+					try {
+						response.getEntity().consumeContent();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}  
+					if (statusCode != 200) {  
+					    Log.d("TwitterConnector", reason);  
+					    Toast.makeText(getBaseContext(), reason, Toast.LENGTH_SHORT).show();
+					    //throw new OAuthNotAuthorizedException();  
+					} else {
+					    Toast.makeText(getBaseContext(), "Post successful!", Toast.LENGTH_SHORT).show();
+					}
 				}
 				return true;
 			}
@@ -156,34 +145,11 @@ public class PrefsView extends PreferenceActivity {
 	
 	protected void onResume() {
 		super.onResume();
-		Uri uri = this.getIntent().getData();  
-		if (uri != null && uri.toString().startsWith(CALLBACK_URL)) {  
-		    String verifier = uri.getQueryParameter(OAuth.OAUTH_VERIFIER);
-		    SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-		    // this will populate token and token_secret in consumer  
-		    try {
-		    	if(!(settings.getString("REQUEST_TOKEN", null) == null || settings.getString("REQUEST_SECRET", null) == null)) {
-					consumer.setTokenWithSecret(settings.getString("REQUEST_TOKEN", null), settings.getString("REQUEST_SECRET", null));
-				}
-				provider.retrieveAccessToken(consumer, verifier);
-			} catch (OAuthMessageSignerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (OAuthNotAuthorizedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (OAuthExpectationFailedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (OAuthCommunicationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			SharedPreferences.Editor editor = settings.edit();
-			editor.putString("USER_TOKEN", consumer.getToken());
-			editor.putString("USER_SECRET", consumer.getTokenSecret());
-			editor.putBoolean("TWITTER", true);
-			editor.commit();
-		} 
+		
+		String token = settings.getString("USER_TOKEN", null);
+		String secret = settings.getString("USER_SECRET", null);
+    	if(!(token == null || secret == null)) 
+    		consumer.setTokenWithSecret(token, secret);
+    	
 	}
 }
