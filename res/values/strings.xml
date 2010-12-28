@@ -18,4 +18,5 @@
 <item>Marketplace at HDC</item>
 <item>Oxford</item>
 </string-array>
+<string name="prefs">Preferences</string>
 </resources>

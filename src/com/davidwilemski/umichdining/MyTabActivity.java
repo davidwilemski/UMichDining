@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 import android.app.DatePickerDialog;
 import android.app.TabActivity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,6 +34,10 @@ public abstract class MyTabActivity extends TabActivity{
 				DatabaseModel dbMod = new DatabaseModel(getApplicationContext());
 				SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
 				new DownloadDataClass(getApplicationContext()).execute(dbMod, settings.getString("DATE", "NONE"));
+				break;
+			case R.id.prefs:
+				Intent settingsActivity = new Intent(getBaseContext(), PrefsView.class);
+				startActivity(settingsActivity);
 				break;
 			default:
 				return super.onOptionsItemSelected(item);

@@ -3,4 +3,5 @@
   xmlns:android="http://schemas.android.com/apk/res/android">
 <item android:id="@+id/date_picker" android:title="@string/date_picker"></item>
 <item android:id="@+id/refresh" android:title="@string/refresh"></item>
+<item android:title="@string/prefs" android:id="@+id/prefs"></item>
 </menu>
