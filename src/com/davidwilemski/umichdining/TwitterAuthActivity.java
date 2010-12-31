@@ -15,7 +15,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,10 +40,12 @@ public class TwitterAuthActivity extends Activity {
 	
 	SharedPreferences settings = null;
 	
-	WebView webview = null;
+	private static WebView webview = null;
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		this.setTitle("Press back when done.");
 		
 		settings = this.getSharedPreferences(PREFS_NAME, 0);
 		
@@ -83,7 +84,7 @@ public class TwitterAuthActivity extends Activity {
 			String token = settings.getString("REQUEST_TOKEN", null);
 			String secret = settings.getString("REQUEST_SECRET", null);
 			
-			Intent going_back = new Intent(this, PrefsView.class);
+			//Intent going_back = new Intent(this, PrefsView.class);
 		    // this will populate token and token_secret in consumer  
 		    try {
 		    	if(!(token == null || secret == null)) 
@@ -118,7 +119,9 @@ public class TwitterAuthActivity extends Activity {
 				toastIt(getBaseContext(), e.getMessage().toString());
 				e.printStackTrace();
 			} finally {
-				this.startActivity(going_back);
+				webview.clearCache(true);
+				webview.destroy();
+				//this.startActivity(going_back);
 				this.finish(); // need this.
 			}
 		}

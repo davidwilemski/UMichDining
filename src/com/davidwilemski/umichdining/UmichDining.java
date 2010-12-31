@@ -70,5 +70,9 @@ public class UmichDining extends MyTabActivity {
 			new DownloadDataClass(getApplicationContext()).execute(dbMod, settings.getString("DATE", "NONE"));
 			initalData = true;
 		}
+		
+		//String title_date = settings.getString("DATE", "NONE");
+		
+		//this.setTitle(title_date + " > UMich Dining");
 	}
 }

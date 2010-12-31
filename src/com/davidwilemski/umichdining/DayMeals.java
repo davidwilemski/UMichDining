@@ -21,7 +21,9 @@ public class DayMeals extends MyTabActivity{
         String d = getIntent().getExtras().getString("d");
         String location = getIntent().getExtras().getString("location");
         
-        this.setTitle("UMich Dining > " + location);
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+		String title_date = settings.getString("DATE", "NONE");
+        this.setTitle("UMich Dining > " + location + " : " + title_date);
         
         Resources res = getResources(); // Resource object to get Drawables
         TabHost tabHost = getTabHost();  // The activity TabHost
@@ -70,7 +72,7 @@ public class DayMeals extends MyTabActivity{
     //return the tab number based on what time it is
     int getMealTab(){
     	//check for preferences
-    	SharedPreferences sp = this.getPreferences(MODE_PRIVATE);
+    	SharedPreferences sp = this.getSharedPreferences(PREFS_NAME, 0);
     
     	Calendar c = Calendar.getInstance();
         if(c.get(Calendar.HOUR_OF_DAY) < sp.getInt("breakfast", 10))
