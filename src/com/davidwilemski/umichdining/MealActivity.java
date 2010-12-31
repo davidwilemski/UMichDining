@@ -81,7 +81,10 @@ public class MealActivity extends ListActivity{
 					       .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 					           public void onClick(DialogInterface dialog, int id) {
 					                // Do thing
-									//Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+									if(!settings.getBoolean("TWITTER", false)) {
+										Toast.makeText(getApplicationContext(), "Tweeting not enabled. Please see your preferences.", Toast.LENGTH_LONG).show();
+										return;
+									}
 									
 									String token = settings.getString("USER_TOKEN", null);
 									String secret = settings.getString("USER_SECRET", null);
