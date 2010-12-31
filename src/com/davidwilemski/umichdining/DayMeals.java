@@ -21,6 +21,8 @@ public class DayMeals extends MyTabActivity{
         String d = getIntent().getExtras().getString("d");
         String location = getIntent().getExtras().getString("location");
         
+        this.setTitle("UMich Dining > " + location);
+        
         Resources res = getResources(); // Resource object to get Drawables
         TabHost tabHost = getTabHost();  // The activity TabHost
         TabHost.TabSpec spec;  // Reusable TabSpec for each tab

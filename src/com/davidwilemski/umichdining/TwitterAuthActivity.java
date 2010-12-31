@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.webkit.WebView;
 import android.widget.Toast;
 
 public class TwitterAuthActivity extends Activity {
@@ -40,6 +41,8 @@ public class TwitterAuthActivity extends Activity {
 	
 	SharedPreferences settings = null;
 	
+	WebView webview = null;
+	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
@@ -53,7 +56,10 @@ public class TwitterAuthActivity extends Activity {
 				Toast.makeText(getBaseContext(), "Please authorize UMichDining to access your twitter account!", Toast.LENGTH_SHORT).show();
 				authUrl = provider.retrieveRequestToken(consumer, CALLBACK_URL);
 				saveRequestInfo(settings, consumer.getToken(), consumer.getTokenSecret());
-				startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(authUrl)));
+				//this.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(authUrl)));
+				webview = new WebView(this);
+				setContentView(webview);
+				webview.loadUrl(authUrl);
 			} catch (OAuthMessageSignerException e) {
 				toastIt(getBaseContext(), e.getMessage().toString());
 				e.printStackTrace();
@@ -76,6 +82,8 @@ public class TwitterAuthActivity extends Activity {
 		if (uri != null && uri.toString().startsWith(CALLBACK_URL)) {  
 			String token = settings.getString("REQUEST_TOKEN", null);
 			String secret = settings.getString("REQUEST_SECRET", null);
+			
+			Intent going_back = new Intent(this, PrefsView.class);
 		    // this will populate token and token_secret in consumer  
 		    try {
 		    	if(!(token == null || secret == null)) 
@@ -98,20 +106,20 @@ public class TwitterAuthActivity extends Activity {
 				editor.putBoolean("TWITTER", true);
 				editor.commit();
 			} catch (OAuthMessageSignerException e) {
-				// TODO Auto-generated catch block
+				toastIt(getBaseContext(), e.getMessage().toString());
 				e.printStackTrace();
 			} catch (OAuthNotAuthorizedException e) {
-				// TODO Auto-generated catch block
+				toastIt(getBaseContext(), e.getMessage().toString());
 				e.printStackTrace();
 			} catch (OAuthExpectationFailedException e) {
-				// TODO Auto-generated catch block
+				toastIt(getBaseContext(), e.getMessage().toString());
 				e.printStackTrace();
 			} catch (OAuthCommunicationException e) {
-				// TODO Auto-generated catch block
+				toastIt(getBaseContext(), e.getMessage().toString());
 				e.printStackTrace();
 			} finally {
-				startActivity(new Intent(this, PrefsView.class));
-				finish(); // need this.
+				this.startActivity(going_back);
+				this.finish(); // need this.
 			}
 		}
 	}
